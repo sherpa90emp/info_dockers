@@ -1,0 +1,7 @@
+twig:
+    file_name_pattern: '*.twig'
+
+when@test:
+    twig:
+        cache: false
+        strict_variables: true

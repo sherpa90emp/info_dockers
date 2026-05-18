@@ -1,0 +1,33 @@
+services:
+  php:
+    build: ./docker/php
+    user: "1000:1000"
+    volumes:
+      - ./app:/var/www/html
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - mysql
+    environment:
+      FRANKENPHP_HOT_RELOAD: 1
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8083:80"
+    volumes:
+      - ./app:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: symfony_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+volumes:
+  mysql_data:
