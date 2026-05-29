@@ -2,6 +2,8 @@ services:
   php:
     build: ./docker/php
     user: "1000:1000"
+    group_add:
+      - "984"
     volumes:
       - ./app:/var/www/html
       - /var/run/docker.sock:/var/run/docker.sock
