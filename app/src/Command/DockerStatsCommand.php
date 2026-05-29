@@ -37,7 +37,7 @@ class DockerStatsCommand extends Command
         $rows = [];
         foreach ($containerStats as $stats) {
             $rows[] = [
-                $stats['Name'][0] ?? 'N/A'
+                $stats['Names'][0] ?? 'N/A'
             ];
         }
 
