@@ -24,8 +24,10 @@ class DockerStatsDTO
     )
     {}
 
-    public function getCleanNames()
+    public function getCleanNames() : string
     {
-        return isset($this->names[0]) ? ltrim($this->names[0], '/') : 'N/A';
+        $name =  isset($this->names[0]) ? ltrim($this->names[0], '/') : 'N/A';
+
+        return str_replace('_', ' ', $name);
     }
 }
