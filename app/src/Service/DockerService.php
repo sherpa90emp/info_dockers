@@ -2,9 +2,17 @@
 
 namespace App\Service;
 
+use App\DTO\DockerStatsDTO;
+use Symfony\Component\Serializer\SerializerInterface;
+
 class DockerService
 {
-    public function getDockerStats(): array
+    public function __construct(
+        private readonly SerializerInterface $serializer
+    )
+    {}
+
+    public function getDockerStatsRaw(): string|array
     {
         $chandler = curl_init();
         curl_setopt($chandler, CURLOPT_UNIX_SOCKET_PATH, "/var/run/docker.sock");
@@ -21,6 +29,21 @@ class DockerService
 
         curl_close($chandler);
 
-        return json_decode($jsonResponse, true);
+        return $jsonResponse;
+    }
+
+    public function getDockerStatsDTO(): array
+    {
+        $jsonResponse = $this->getDockerStatsRaw();
+
+        if (is_array($jsonResponse) && isset($jsonResponse['error'])) {
+            return $jsonResponse;
+        }
+
+        return $this->serializer->deserialize(
+            $jsonResponse,
+            DockerStatsDTO::class . '[]',
+            'json'
+        );
     }
 }
