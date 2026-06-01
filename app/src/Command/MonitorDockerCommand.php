@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'monitor:docker',
+    name: 'app:docker:monitor',
     description: 'Recupera le statistiche dei container Docker',
 )]
 class MonitorDockerCommand extends Command
