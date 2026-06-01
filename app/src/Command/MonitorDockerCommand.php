@@ -27,7 +27,7 @@ class MonitorDockerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $containerStats = $this->dockerService->getDockerStats();
+        $containerStats = $this->dockerService->getDockerStatsDTO();
 
         if (isset($containerStats['error'])) {
             $io->error($containerStats['error']);
@@ -35,13 +35,13 @@ class MonitorDockerCommand extends Command
         }
 
         $rows = [];
-        foreach ($containerStats as $stats) {
+        foreach ($containerStats as $statsDTO) {
             $rows[] = [
-                $stats['Id'] ?? 'N/A',
-                $stats['Names'][0] ?? 'N/A',
-                $stats['Status'] ?? 'N/A',
-                $stats['State'] ?? 'N/A',
-                $stats['Health']['Status'] ?? 'N/A',
+                $statsDTO->id,
+                $statsDTO->getCleanNames(),
+                $statsDTO->status,
+                $statsDTO->state,
+                $statsDTO->getHealthStatus()
             ];
         }
 
