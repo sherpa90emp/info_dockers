@@ -11,13 +11,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'DockerStatsCommand',
+    name: 'monitor:docker',
     description: 'Recupera le statistiche dei container Docker',
 )]
-class DockerStatsCommand extends Command
+class MonitorDockerCommand extends Command
 {
     public function __construct(
-        private DockerService $dockerService,
+        private readonly DockerService $dockerService,
         private EntityManagerInterface $entityManager
     )
     {
@@ -37,12 +37,16 @@ class DockerStatsCommand extends Command
         $rows = [];
         foreach ($containerStats as $stats) {
             $rows[] = [
-                $stats['Names'][0] ?? 'N/A'
+                $stats['Id'] ?? 'N/A',
+                $stats['Names'][0] ?? 'N/A',
+                $stats['Status'] ?? 'N/A',
+                $stats['State'] ?? 'N/A',
+                $stats['Health']['Status'] ?? 'N/A',
             ];
         }
 
         $io->table(
-            ['Nome container'],
+            ['ID', 'Nome container', 'Status', 'State', 'Health'],
             $rows
         );
 
