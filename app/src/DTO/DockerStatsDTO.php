@@ -4,23 +4,23 @@ namespace App\DTO;
 
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
-class DockerStatsDTO
+readonly class DockerStatsDTO
 {
     public function __construct(
         #[SerializedName('Id')]
-        public readonly string $id,
+        public string $id,
 
         #[SerializedName('Names')]
-        public readonly array $names,
+        public array  $names,
 
         #[SerializedName('Status')]
-        public readonly string $status,
+        public string $status,
 
         #[SerializedName('State')]
-        public readonly string $state,
+        public string $state,
 
         #[SerializedName('Health')]
-        public readonly string $health
+        public string $health
     )
     {}
 
