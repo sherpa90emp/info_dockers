@@ -20,7 +20,7 @@ readonly class DockerStatsDTO
         public string $state,
 
         #[SerializedName('Health')]
-        public string $health
+        public ?array $health
     )
     {}
 
@@ -29,5 +29,10 @@ readonly class DockerStatsDTO
         $name =  isset($this->names[0]) ? ltrim($this->names[0], '/') : 'N/A';
 
         return str_replace('_', ' ', $name);
+    }
+
+    public function getHealthStatus() : string
+    {
+        return $this->health['Status'] ?? 'N/A';
     }
 }
