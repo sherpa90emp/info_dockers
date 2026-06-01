@@ -13,7 +13,7 @@ final class TestController extends AbstractController
     #[Route('/test', name: 'app_test')]
     public function test(DockerService $dockerService): Response
     {
-        $test = $dockerService->getDockerStats();
+        $test = $dockerService->getDockerStatsDTO();
 
         dd($test);
 
