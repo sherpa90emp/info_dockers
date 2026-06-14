@@ -5,12 +5,13 @@ namespace App\Service;
 use App\DTO\DockerStatsDTO;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class DockerService
+readonly class DockerService
 {
     public function __construct(
-        private readonly SerializerInterface $serializer
+        private SerializerInterface $serializer
     )
-    {}
+    {
+    }
 
     public function getDockerStatsRaw(): string|array
     {
@@ -21,7 +22,7 @@ class DockerService
 
         $jsonResponse = curl_exec($chandler);
 
-        if ($jsonResponse === false) {
+        if (!$jsonResponse) {
             $error = curl_error($chandler);
             curl_close($chandler);
             return ['error' => 'Errore connessione Socket: ' . $error];
@@ -40,10 +41,19 @@ class DockerService
             return $jsonResponse;
         }
 
-        return $this->serializer->deserialize(
+        $dockerStatsDTO = $this->serializer->deserialize(
             $jsonResponse,
             DockerStatsDTO::class . '[]',
             'json'
         );
+
+        $this->addStatsDB($dockerStatsDTO);
+
+        return $dockerStatsDTO;
+    }
+
+    public function addStatsDB(array $dockerStatsDTO): void
+    {
+
     }
 }
