@@ -18,7 +18,6 @@ class MonitorDockerCommand extends Command
 {
     public function __construct(
         private readonly DockerService $dockerService,
-        private EntityManagerInterface $entityManager
     )
     {
         parent::__construct();
@@ -34,24 +33,32 @@ class MonitorDockerCommand extends Command
             return Command::FAILURE;
         }
 
+        return $this->stampaDatiContainer($containerStats, $io);
+    }
+
+    private function stampaDatiContainer(array $containerStats, $io) : int
+    {
         $rows = [];
         foreach ($containerStats as $statsDTO) {
             $rows[] = [
                 $statsDTO->id,
                 $statsDTO->getCleanNames(),
-                $statsDTO->status,
+                $statsDTO->getCleanStatus(),
                 $statsDTO->state,
                 $statsDTO->getHealthStatus()
             ];
         }
 
+        $io->success('Dati recuperati con successo alle ore: ');
+
+        return Command::SUCCESS;
+    }
+
+    private function debugTable($rows, $io)
+    {
         $io->table(
             ['ID', 'Nome container', 'Status', 'State', 'Health'],
             $rows
         );
-
-        $io->success('Dati recuperati con successo');
-
-        return Command::SUCCESS;
     }
 }
