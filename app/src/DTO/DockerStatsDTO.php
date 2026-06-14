@@ -28,11 +28,18 @@ readonly class DockerStatsDTO
     {
         $name =  isset($this->names[0]) ? ltrim($this->names[0], '/') : 'N/A';
 
-        return str_replace('_', ' ', $name);
+        return str_replace(['_', '-'], ' ', $name);
     }
 
     public function getHealthStatus() : string
     {
         return $this->health['Status'] ?? 'N/A';
+    }
+
+    public function getCleanStatus()
+    {
+        $status = $this->status;
+
+        return str_replace(['(healthy)'], '', $status);
     }
 }
