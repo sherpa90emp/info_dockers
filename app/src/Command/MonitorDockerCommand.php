@@ -16,6 +16,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class MonitorDockerCommand extends Command
 {
+    /**
+     * Costruttore che inietta il servizio DockerService.
+     *
+     * @param DockerService $dockerService Servizio per l'interfaccia Docker
+     */
     public function __construct(
         private readonly DockerService $dockerService,
     )
@@ -23,6 +28,14 @@ class MonitorDockerCommand extends Command
         parent::__construct();
     }
 
+    /**
+     * Esegue il comando console per il monitoraggio Docker.
+     * Recupera dati, verifica errori e visualizza i risultati.
+     *
+     * @param InputInterface $input Interfaccia di input del comando
+     * @param OutputInterface $output Interfaccia di output del comando
+     * @return int Codice di uscita (SUCCESS o FAILURE)
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -36,6 +49,13 @@ class MonitorDockerCommand extends Command
         return $this->stampaDatiContainer($containerStats, $io);
     }
 
+    /**
+     * Formatta i dati dei container in una struttura tabellare.
+     *
+     * @param array $containerStats Array di DockerStatsDTO
+     * @param SymfonyStyle $io Interfaccia di output per stile Symfony
+     * @return int Codice di uscita (SUCCESS)
+     */
     private function stampaDatiContainer(array $containerStats, $io) : int
     {
         $rows = [];
@@ -43,7 +63,7 @@ class MonitorDockerCommand extends Command
             $rows[] = [
                 $statsDTO->id,
                 $statsDTO->getCleanNames(),
-                $statsDTO->getCleanStatus(),
+                $statsDTO->getCleanIntStatus(),
                 $statsDTO->state,
                 $statsDTO->getHealthStatus()
             ];
@@ -54,6 +74,13 @@ class MonitorDockerCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * Visualizza una tabella con i dati dei container.
+     * (Da usare insieme a stampaDatiContainer per debug dati)
+     *
+     * @param array $rows Dati formattati in righe
+     * @param SymfonyStyle $io Interfaccia di output per stile Symfony
+     */
     private function debugTable($rows, $io)
     {
         $io->table(
