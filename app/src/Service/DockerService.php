@@ -3,12 +3,20 @@
 namespace App\Service;
 
 use App\DTO\DockerStatsDTO;
+use App\Repository\ContainerRepository;
+use App\Repository\ContainerStatsRepository;
+use App\Repository\ContainerTypeRepository;
+use App\Repository\ProjectRepository;
 use Symfony\Component\Serializer\SerializerInterface;
 
 readonly class DockerService
 {
     public function __construct(
-        private SerializerInterface $serializer
+        private SerializerInterface $serializer,
+        private ProjectRepository $projectRepository,
+        private ContainerTypeRepository $containerTypeRepository,
+        private ContainerRepository $containerRepository,
+        private ContainerStatsRepository $containerStatsRepository,
     )
     {
     }
@@ -54,6 +62,12 @@ readonly class DockerService
 
     public function addStatsDB(array $dockerStatsDTO): void
     {
+        $this->projectRepository->saveFromDTOToProject($dockerStatsDTO);
 
+        $this->containerTypeRepository->saveFromDTOToContainerType($dockerStatsDTO);
+
+        $this->containerRepository->saveFromDTOToContainer($dockerStatsDTO);
+
+        $this->containerStatsRepository->saveFromDTOToContainerStats($dockerStatsDTO);
     }
 }
