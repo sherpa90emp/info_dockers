@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Container;
+use App\Entity\ContainerType;
+use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,38 @@ class ContainerRepository extends ServiceEntityRepository
         parent::__construct($registry, Container::class);
     }
 
-    //    /**
-    //     * @return Container[] Returns an array of Container objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function saveFromDTOToContainer(array $dockerStatsDTO) : void
+    {
+        $entityManager = $this->getEntityManager();
+        $projectRepo = $entityManager->getRepository(Project::class);
+        $typeRepo = $entityManager->getRepository(ContainerType::class);
 
-    //    public function findOneBySomeField($value): ?Container
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+
+
+        foreach ($dockerStatsDTO as $dockerStatDTO) {
+            $dockerId = $dockerStatDTO->id;
+
+            $container = $this->findOneBy(['dockerId' => $dockerId]);
+
+            if (!$container) {
+                $container = new Container();
+                $container->setDockerId($dockerId);
+                $container->setName($dockerStatDTO->getCleanNames());
+
+                $project = $projectRepo->findOneBy(['projectName' => $dockerStatDTO->getProjectName()]);
+                if ($project) {
+                    $container->setProject($project);
+                }
+
+                $type = $typeRepo->findOneBy(['label' => $dockerStatDTO->getServicename()]);
+                if ($type) {
+                    $container->setType($type);
+                }
+
+                $entityManager->persist($container);
+            }
+        }
+
+        $entityManager->flush();
+    }
 }

@@ -16,28 +16,25 @@ class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 
-    //    /**
-    //     * @return Project[] Returns an array of Project objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function saveFromDTOToProject(array $dockerStatsDTO) : void
+    {
+        $entityManager = $this->getEntityManager();
 
-    //    public function findOneBySomeField($value): ?Project
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        foreach ($dockerStatsDTO as $dockerStatDTO) {
+            $projectName = $dockerStatDTO->getProjectName();
+
+            $project = $this->findOneBy(['projectName' => $projectName]);
+
+            if (!$project) {
+                $project = new Project();
+                $project->setProjectName($projectName);
+                $project->setPath($dockerStatDTO->getPath());
+                $entityManager->persist($project);
+            } else {
+                $project->setPath($dockerStatDTO->getPath());
+            }
+        }
+
+        $entityManager->flush();
+    }
 }

@@ -16,28 +16,23 @@ class ContainerTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, ContainerType::class);
     }
 
-    //    /**
-    //     * @return ContainerType[] Returns an array of ContainerType objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function saveFromDTOToContainerType(array $dockerStatsDTO) : void
+    {
+        $entityManager = $this->getEntityManager();
 
-    //    public function findOneBySomeField($value): ?ContainerType
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        foreach ($dockerStatsDTO as $dockerStatDTO) {
+            $serviceName = $dockerStatDTO->getServiceName();
+
+            $containerType = $this->findOneBy(['label' => $serviceName]);
+
+            if (!$containerType) {
+                $containerType = new ContainerType();
+                $containerType->setLabel($serviceName);
+                $entityManager->persist($containerType);
+
+            }
+        }
+
+        $entityManager->flush();
+    }
 }
