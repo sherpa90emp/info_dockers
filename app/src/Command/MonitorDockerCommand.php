@@ -65,7 +65,10 @@ class MonitorDockerCommand extends Command
                 $statsDTO->getCleanNames(),
                 $statsDTO->getCleanIntStatus(),
                 $statsDTO->state,
-                $statsDTO->getHealthStatus()
+                $statsDTO->getHealthStatus(),
+                $statsDTO->getServiceName(),
+                $statsDTO->getProjectName(),
+                $statsDTO->getPath(),
             ];
         }
 

@@ -24,7 +24,7 @@ services:
   mysql:
     image: mysql:8
     environment:
-      MYSQL_DATABASE: symfony_db
+      MYSQL_DATABASE: info_dockers_db
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - mysql_data:/var/lib/mysql
