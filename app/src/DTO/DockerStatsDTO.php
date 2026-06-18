@@ -20,7 +20,10 @@ readonly class DockerStatsDTO
         public string $state,
 
         #[SerializedName('Health')]
-        public ?array $health
+        public ?array $health,
+
+        #[SerializedName('Labels')]
+        public ?array $labels
     )
     {}
 
@@ -53,5 +56,20 @@ readonly class DockerStatsDTO
         $status = $this->status;
 
         return (int)(preg_replace('/\D/', '', $status));
+    }
+
+    public function getServiceName() : string
+    {
+        return $this->labels['com.docker.compose.service'] ?? 'N/A';
+    }
+
+    public function getProjectName()
+    {
+        return $this->labels['com.docker.compose.project'] ?? 'N/A';
+    }
+
+    public function getPath()
+    {
+        return $this->labels['com.docker.compose.project.working_dir'] ?? 'N/A';
     }
 }
