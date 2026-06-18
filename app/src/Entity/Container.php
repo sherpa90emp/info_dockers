@@ -4,6 +4,7 @@ namespace App\Entity;
 
 
 use App\Repository\ContainerRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ContainerRepository::class)]
@@ -15,19 +16,10 @@ class Container
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $dockerId = null;
+    private ?string $dockerId = null;
 
     #[ORM\Column(length: 50)]
     private ?string $name = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $state = null;
-
-    #[ORM\Column]
-    private ?int $duration = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $health = null;
 
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'containers')]
     #[ORM\JoinColumn(nullable: false)]
@@ -37,29 +29,27 @@ class Container
     #[ORM\JoinColumn(nullable: false)]
     private ?ContainerType $type = null;
 
+    #[ORM\OneToMany(targetEntity: ContainerStats::class, mappedBy: 'container')]
+    private Collection $stats;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function setId(?int $id): void
     {
         $this->id = $id;
-
-        return $this;
     }
 
-    public function getDockerId(): ?int
+    public function getDockerId(): ?string
     {
         return $this->dockerId;
     }
 
-    public function setDockerId(int $dockerId): static
+    public function setDockerId(?string $dockerId): void
     {
         $this->dockerId = $dockerId;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -67,46 +57,38 @@ class Container
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
-    public function getState(): ?string
+    public function getProject(): ?Project
     {
-        return $this->state;
+        return $this->project;
     }
 
-    public function setState(string $state): static
+    public function setProject(?Project $project): void
     {
-        $this->state = $state;
-
-        return $this;
+        $this->project = $project;
     }
 
-    public function getDuration(): ?int
+    public function getType(): ?ContainerType
     {
-        return $this->duration;
+        return $this->type;
     }
 
-    public function setDuration(int $duration): static
+    public function setType(?ContainerType $type): void
     {
-        $this->duration = $duration;
-
-        return $this;
+        $this->type = $type;
     }
 
-    public function getHealth(): ?string
+    public function getStats(): Collection
     {
-        return $this->health;
+        return $this->stats;
     }
 
-    public function setHealth(string $health): static
+    public function setStats(Collection $stats): void
     {
-        $this->health = $health;
-
-        return $this;
+        $this->stats = $stats;
     }
 }

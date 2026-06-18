@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ContainerTypeRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ContainerTypeRepository::class)]
@@ -15,6 +16,9 @@ class ContainerType
 
     #[ORM\Column(length: 50)]
     private ?string $label = null;
+
+    #[ORM\OneToMany(targetEntity: Container::class, mappedBy: 'type')]
+    private Collection $containers;
 
     public function getId(): ?int
     {
