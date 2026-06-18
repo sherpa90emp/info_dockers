@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/test', name: 'app_test')]
 final class TestController extends AbstractController
 {
 
@@ -19,7 +20,7 @@ final class TestController extends AbstractController
      * @return Response
      */
     #[NoReturn]
-    #[Route('/test', name: 'app_test')]
+    #[Route('', name: '')]
     public function test(DockerService $dockerService): Response
     {
         $raw = $dockerService->getDockerStatsRaw();
@@ -49,7 +50,10 @@ final class TestController extends AbstractController
                 $statsDTO->getCleanNames(),
                 $statsDTO->getCleanIntStatus(),
                 $statsDTO->state,
-                $statsDTO->getHealthStatus()
+                $statsDTO->getHealthStatus(),
+                $statsDTO->getServiceName(),
+                $statsDTO->getProjectName(),
+                $statsDTO->getPath(),
             ];
         }
 
