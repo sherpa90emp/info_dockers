@@ -59,4 +59,10 @@ final class TestController extends AbstractController
 
         return $rows;
     }
+
+    #[Route('/getDockerStats', name: 'getDockerStats', methods: ['GET'])]
+    public function getDockerStats() : Response
+    {
+        return $this->render('test/ag-grid-test.twig');
+    }
 }
