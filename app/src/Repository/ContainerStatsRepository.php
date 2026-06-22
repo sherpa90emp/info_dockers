@@ -41,4 +41,14 @@ class ContainerStatsRepository extends ServiceEntityRepository
 
         $entityManager->flush();
     }
+
+    /**
+     * Ottiene tutte le statistiche dei container.
+     *
+     * @return ContainerStats[]|null
+     */
+    public function getAllStats() : ?array
+    {
+        return $this->findAll();
+    }
 }

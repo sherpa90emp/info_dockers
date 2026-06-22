@@ -70,4 +70,9 @@ readonly class DockerService
 
         $this->containerStatsRepository->saveFromDTOToContainerStats($dockerStatsDTO);
     }
+
+    public function getStatsDB() : string
+    {
+        $containerStats = $this->containerStatsRepository->getAllStats();
+    }
 }
