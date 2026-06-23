@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
+use App\DTO\ContainerStatsDTO;
 use App\DTO\DockerStatsDTO;
 use App\Repository\ContainerRepository;
 use App\Repository\ContainerStatsRepository;
 use App\Repository\ContainerTypeRepository;
 use App\Repository\ProjectRepository;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 readonly class DockerService
@@ -78,9 +78,7 @@ readonly class DockerService
 
         $data = [];
         foreach ($containerStats as $containerStat) {
-            $data = [
-
-            ];
+            $data[] = ContainerStatsDTO::EntityToDTO($containerStat);
         }
 
         return $data;
