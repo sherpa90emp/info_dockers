@@ -7,6 +7,7 @@ use App\Repository\ContainerRepository;
 use App\Repository\ContainerStatsRepository;
 use App\Repository\ContainerTypeRepository;
 use App\Repository\ProjectRepository;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 readonly class DockerService
@@ -74,5 +75,11 @@ readonly class DockerService
     public function getStatsDB() : string
     {
         $containerStats = $this->containerStatsRepository->getAllStats();
+
+        try {
+            return $this->serializer->serialize($containerStats, 'json');
+        } catch (ExceptionInterface $e) {
+            return 'Errore serializzazione: ' . $e->getMessage();
+        }
     }
 }
