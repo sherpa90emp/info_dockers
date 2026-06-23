@@ -72,14 +72,17 @@ readonly class DockerService
         $this->containerStatsRepository->saveFromDTOToContainerStats($dockerStatsDTO);
     }
 
-    public function getStatsDB() : string
+    public function getStatsDB() : ?array
     {
         $containerStats = $this->containerStatsRepository->getAllStats();
 
-        try {
-            return $this->serializer->serialize($containerStats, 'json');
-        } catch (ExceptionInterface $e) {
-            return 'Errore serializzazione: ' . $e->getMessage();
+        $data = [];
+        foreach ($containerStats as $containerStat) {
+            $data = [
+
+            ];
         }
+
+        return $data;
     }
 }
