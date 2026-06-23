@@ -19,7 +19,7 @@ const gridOptions = {
 
 
 document.addEventListener('DOMContentLoaded', function(e) {
-    fetch("/test/getContainerStats")
+    fetch("/docker-stats")
         .then((response) => response.json())
         .then((data) => gridApi.setGridOption('rowData', data));
 
