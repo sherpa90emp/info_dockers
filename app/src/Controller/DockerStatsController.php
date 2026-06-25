@@ -19,7 +19,13 @@ class DockerStatsController extends AbstractController
     {
     }
 
-    #[Route('', name: '', methods: ['GET'])]
+    #[Route('', name: '')]
+    public function getDockerStats() : Response
+    {
+        return $this->render('docker-stats/docker-stats.twig');
+    }
+
+    #[Route('/tabella', name: 'docker_stats.tabella', methods: ['GET'])]
     public function getContainerStats(DockerService $dockerService) : Response
     {
         $stats = $dockerService->getStatsDB();
