@@ -5,24 +5,26 @@ const gridOptions = {
 
     // Column Definitions: Defines the columns to be displayed.
     columnDefs: [
-        { field: "Id" },
+        { field: "Id", flex: 1,
+        },
         { field: "State" },
-        { field: "Status" },
+        { field: "Status", flex: 2,},
         { field: "Duration" },
         { field: "Health" },
-        { field: "Created" },
-    ]
+        { field: "Created", flex: 2,
+        },
+    ],
+
+    pagination: true,
+    paginationPageSize: 17,
+    paginationPageSizeSelector: [10, 20],
 };
 
-
-
-
-
 document.addEventListener('DOMContentLoaded', function(e) {
-    fetch("/docker-stats")
-        .then((response) => response.json())
-        .then((data) => gridApi.setGridOption('rowData', data));
-
     const myGridElement = document.querySelector('#myGrid');
     gridApi = agGrid.createGrid(myGridElement, gridOptions);
+
+    fetch("/docker-stats/tabella")
+        .then((response) => response.json())
+        .then((data) => gridApi.setGridOption('rowData', data));
 })
