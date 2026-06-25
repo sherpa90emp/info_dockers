@@ -1,8 +1,11 @@
 body {
-    height: 100vh;
     margin: 0;
 }
 
 #contenitore-boxes {
     background-color: #3b82f6 !important;
+}
+
+#contenitore {
+    height: 90vh;
 }
