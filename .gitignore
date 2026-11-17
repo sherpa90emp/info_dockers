@@ -11,4 +11,5 @@ var/
 vendor/
 /.idea/
 .gitattributes
+.editorconfig
 ###< symfony/framework-bundle ###
